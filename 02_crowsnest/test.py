@@ -12,6 +12,7 @@ consonant_words = [
     'zebrafish'
 ]
 vowel_words = ['aviso', 'eel', 'iceberg', 'octopus', 'upbound']
+invalid_words = ['4sharks', 'cam3l', 'sea!gul']
 template = 'Ahoy, Captain, {} {} off the larboard bow!'
 
 
@@ -43,11 +44,11 @@ def test_consonant():
 
 # --------------------------------------------------
 def test_consonant_upper():
-    """brigantine -> a Brigatine"""
+    """brigantine -> A Brigatine"""
 
     for word in consonant_words:
         out = getoutput(f'{prg} {word.title()}')
-        assert out.strip() == template.format('a', word.title())
+        assert out.strip() == template.format('A', word.title())
 
 
 # --------------------------------------------------
@@ -61,8 +62,29 @@ def test_vowel():
 
 # --------------------------------------------------
 def test_vowel_upper():
-    """octopus -> an Octopus"""
+    """octopus -> An Octopus"""
 
     for word in vowel_words:
-        out = getoutput(f'{prg} {word.upper()}')
-        assert out.strip() == template.format('an', word.upper())
+        out = getoutput(f'{prg} {word.title()}')
+        assert out.strip() == template.format('An', word.title())
+
+def test_boat_larboard():
+    """side is larboard"""
+    side = "larboard"
+    for word in consonant_words:
+        out = getoutput(f"{prg} --side {side} {word}")
+        assert out.strip() == f'Ahoy, Captain, a {word} off the {side} bow!'
+
+def test_boat_starboard():
+    """side is starboard"""
+    side = "starboard"
+    for word in consonant_words:
+        out = getoutput(f"{prg} --side {side} {word}")
+        assert out.strip() == f'Ahoy, Captain, a {word} off the {side} bow!'
+
+def test_invalid_input():
+    """Test input word is valid alpha"""
+
+    for word in invalid_words:
+        out = getoutput(f"{prg} {word}")
+        assert out.strip() == f"FAIL: {word} is not valid alphabetic string"
