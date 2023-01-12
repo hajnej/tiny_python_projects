@@ -34,26 +34,20 @@ def main():
     args = get_args()
     files_count=len(args.file)
     # Init counters for total number of lines,works and bytes if count of file is more than 2
-    if files_count > 1:
-        total_num_lines=0
-        total_num_words=0
-        total_num_bytes=0
+    total_num_lines, total_num_words, total_num_bytes = 0, 0, 0
     # Iterate over all files handles
     for file_handle in args.file:
         # Init counters
-        num_lines = 0
-        num_words = 0
-        num_bytes = 0
+        num_lines, num_words, num_bytes = 0, 0, 0
         # Read a line from file handle
         for line in file_handle:
             num_lines += 1
             num_words += len(line.split())
             num_bytes += len(line)
         file_handle.close()
-        if files_count > 1:
-            total_num_lines += num_lines
-            total_num_words += num_words
-            total_num_bytes += num_bytes
+        total_num_lines += num_lines
+        total_num_words += num_words
+        total_num_bytes += num_bytes
         print(f'{num_lines:8}{num_words:8}{num_bytes:8} {file_handle.name}')
     if files_count > 1:
         print(f'{total_num_lines:8}{total_num_words:8}{total_num_bytes:8} total')
